@@ -1,0 +1,2 @@
+# seqapp
+A Django project
