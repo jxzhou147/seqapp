@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from .models import Sequence
+from .models import Function
 
-admin.site.register(Sequence)
+admin.site.register(Function)
