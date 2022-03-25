@@ -8,4 +8,3 @@ class Function(models.Model):
 
     def __str__(self):
         return self.function_name
-
