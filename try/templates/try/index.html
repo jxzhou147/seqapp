@@ -1,5 +1,6 @@
 <form action="{% url 'try:results' %}" method="post">
+{% csrf_token %}
 <h1>Please Input a Sequence</h1>
-<input type="'text" name="sequence"><br>
+<input type="'text" id="sequence" name="sequence"><br>
 <input type="submit" value="Submit">
 </form>
