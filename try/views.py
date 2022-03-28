@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .functions import sequence_len
+from .reproduction import run
 
 
 def index(request):
@@ -9,6 +9,10 @@ def index(request):
 
 def results(request):
     sequence_input = request.POST['sequence']
-    sequence_length = sequence_len(sequence_input)
-    context = {'output': sequence_length}
+    NET_CHARGE, CDH3_HI, FabNetCharge, FvCSP, HISum = run(sequence_input)
+    context = {'net_charge': NET_CHARGE,
+            'HIndex': CDH3_HI,
+            'FabNetCharge': FabNetCharge,
+            'FvCSP': FvCSP,
+            'HISum': HISum}
     return render(request, 'try/results.html', context)
