@@ -1,6 +1,0 @@
-import sys
-sys.path.append(r'.')
-from reproduction import run
-
-a, b, c, d, e = run("sdfsa")
-print(a, b, c, d, e)
