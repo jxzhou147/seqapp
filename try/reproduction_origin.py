@@ -21,25 +21,25 @@ Her_CDRL3 = "QQHYTTPPT"
 # pH for net charge calculation (Sharma et. al)
 pH = 5.5
 
+# The following code reads in the pKa values taken from:
+# http://homepage.smc.edu/kline_peggy/Organic/Amino_Acid_pKa.pdf
+pKas = pd.read_csv("data/pKas.csv",index_col = 0,header=None)
+
+# The following code reads in the Eisenberg hydrophobicity scales taken from:
+# Eisenberg et al. 1984
+Eisenberg = pd.read_csv("data/Eisenberg.csv",index_col = 0,header=None)
+
+# Identify the positions of hydrophobic and hydrophilic residues
+phobic = [1,2,5,8,10,13,18,19,20]
+philic = [3,4,6,7,9,11,12,14,15,16,17]
+phobic = list(map(lambda x:x-1,phobic))
+philic = list(map(lambda x:x-1,philic))
+
 
 def net_charge(aa_seq):
   # The following function calculates the net charge of an input amino acid sequence
   # at a given pH.
   # aa_seq: an amino acid sequence
-
-  # The following code reads in the pKa values taken from:
-  # http://homepage.smc.edu/kline_peggy/Organic/Amino_Acid_pKa.pdf
-  pKas = pd.read_csv("~/Documents/python/seqapp/try/data/pKas.csv",index_col = 0,header=None)
-
-  # The following code reads in the Eisenberg hydrophobicity scales taken from:
-  # Eisenberg et al. 1984
-  Eisenberg = pd.read_csv("~/Documents/python/seqapp/try/data/Eisenberg.csv",index_col = 0,header=None)
-
-  # Identify the positions of hydrophobic and hydrophilic residues
-  phobic = [1,2,5,8,10,13,18,19,20]
-  philic = [3,4,6,7,9,11,12,14,15,16,17]
-  phobic = list(map(lambda x:x-1,phobic))
-  philic = list(map(lambda x:x-1,philic))
 
   # Create integer list of amino acid counts
   AA_counts = list(map(aa_seq.count,pKas.index)) 
@@ -66,20 +66,6 @@ def HIndex(aa_seq):
   # The following function calculates the hydrophobicity index of an input amino acid sequence.
   # aa_seq: an amino acid sequence
 
-  # The following code reads in the pKa values taken from:
-  # http://homepage.smc.edu/kline_peggy/Organic/Amino_Acid_pKa.pdf
-  pKas = pd.read_csv("~/Documents/python/seqapp/try/data/pKas.csv",index_col = 0,header=None)
-
-  # The following code reads in the Eisenberg hydrophobicity scales taken from:
-  # Eisenberg et al. 1984
-  Eisenberg = pd.read_csv("~/Documents/python/seqapp/try/data/Eisenberg.csv",index_col = 0,header=None)
-
-  # Identify the positions of hydrophobic and hydrophilic residues
-  phobic = [1,2,5,8,10,13,18,19,20]
-  philic = [3,4,6,7,9,11,12,14,15,16,17]
-  phobic = list(map(lambda x:x-1,phobic))
-  philic = list(map(lambda x:x-1,philic))
-
   # Create integer list of amino acid counts
   AA_counts = list(map(aa_seq.count,Eisenberg.index))
 
@@ -96,19 +82,22 @@ def HIndex(aa_seq):
 
 
 
-def run(x):
+# input CDH3 Amino Acid sequence
+x = input("Enter CDH3 Amino Acid sequence:")
 
-  # Calculate the net charge of one amino acid sequence and add the net charge of the entire VH sequence minus CDRH3
-  NET_CHARGE = net_charge(x)
-
-  VHNetCharge = net_charge(x) + net_charge(Her_VH_mCDR3)
-  FabNetCharge = VHNetCharge + net_charge(Her_VK)
-  FvCSP = VHNetCharge * net_charge(Her_VK)
+# Calculate the net charge of one amino acid sequence and add the net charge of the entire VH sequence minus CDRH3
+VHNetCharge = net_charge(x) + net_charge(Her_VH_mCDR3)
+FabNetCharge = VHNetCharge + net_charge(Her_VK)
+FvCSP = VHNetCharge * net_charge(Her_VK)
 
 
-  # Calculate the hydrophobicity index of one amino acid sequence
-  CDH3_HI = HIndex(x)
-  HISum = CDH3_HI + HIndex(Her_CDRL1) + HIndex(Her_CDRL3)
+# Calculate the hydrophobicity index of one amino acid sequence
+CDH3_HI = HIndex(x)
+HISum = CDH3_HI + HIndex(Her_CDRL1) + HIndex(Her_CDRL3)
 
-  return NET_CHARGE, CDH3_HI, FabNetCharge, FvCSP, HISum
-
+print("net charge of your input sequence:",net_charge(x),'\n',
+      "HIndex of your input sequence:", CDH3_HI,'\n',
+      "FabNetCharge of your input sequence:",FabNetCharge,'\n',
+      "FvCSP of your input sequence:",FvCSP,'\n',
+      "HISum of your input sequence:",HISum,'\n'
+)
